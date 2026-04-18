@@ -7,7 +7,7 @@ import {
 import { useStoryStream } from "@/hooks/use-story-stream";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Send, Sparkles } from "lucide-react";
+import { ArrowLeft, Send, Sparkles, PenLine } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Story() {
