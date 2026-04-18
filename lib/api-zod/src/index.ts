@@ -4,3 +4,4 @@ export type { OpenrouterConversation } from "./generated/types/openrouterConvers
 export type { OpenrouterConversationWithMessages } from "./generated/types/openrouterConversationWithMessages";
 export type { OpenrouterError } from "./generated/types/openrouterError";
 export type { OpenrouterMessage } from "./generated/types/openrouterMessage";
+export type { UpdateOpenrouterMessageBody } from "./generated/types/updateOpenrouterMessageBody";

@@ -47,6 +47,10 @@ export interface OpenrouterConversationWithMessages {
   messages: OpenrouterMessage[];
 }
 
+export interface UpdateOpenrouterMessageBody {
+  content: string;
+}
+
 export interface OpenrouterError {
   error: string;
 }

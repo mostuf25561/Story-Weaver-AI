@@ -13,3 +13,4 @@ export * from "./openrouterConversationWithMessages";
 export * from "./openrouterError";
 export * from "./openrouterMessage";
 export * from "./sendOpenrouterMessageBody";
+export * from "./updateOpenrouterMessageBody";

@@ -64,6 +64,25 @@ export const DeleteOpenrouterConversationParams = zod.object({
 });
 
 /**
+ * @summary Update the content of an existing message
+ */
+export const UpdateOpenrouterMessageParams = zod.object({
+  messageId: zod.coerce.number(),
+});
+
+export const UpdateOpenrouterMessageBody = zod.object({
+  content: zod.string(),
+});
+
+export const UpdateOpenrouterMessageResponse = zod.object({
+  id: zod.number(),
+  conversationId: zod.number(),
+  role: zod.string(),
+  content: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+
+/**
  * @summary List messages in a conversation
  */
 export const ListOpenrouterMessagesParams = zod.object({

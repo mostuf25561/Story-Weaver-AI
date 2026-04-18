@@ -24,6 +24,7 @@ import type {
   OpenrouterError,
   OpenrouterMessage,
   SendOpenrouterMessageBody,
+  UpdateOpenrouterMessageBody,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -456,6 +457,97 @@ export const useDeleteOpenrouterConversation = <
   TContext
 > => {
   return useMutation(getDeleteOpenrouterConversationMutationOptions(options));
+};
+
+/**
+ * @summary Update the content of an existing message
+ */
+export const getUpdateOpenrouterMessageUrl = (messageId: number) => {
+  return `/api/openrouter/messages/${messageId}`;
+};
+
+export const updateOpenrouterMessage = async (
+  messageId: number,
+  updateOpenrouterMessageBody: UpdateOpenrouterMessageBody,
+  options?: RequestInit,
+): Promise<OpenrouterMessage> => {
+  return customFetch<OpenrouterMessage>(
+    getUpdateOpenrouterMessageUrl(messageId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateOpenrouterMessageBody),
+    },
+  );
+};
+
+export const getUpdateOpenrouterMessageMutationOptions = <
+  TError = ErrorType<OpenrouterError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateOpenrouterMessage>>,
+    TError,
+    { messageId: number; data: BodyType<UpdateOpenrouterMessageBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateOpenrouterMessage>>,
+  TError,
+  { messageId: number; data: BodyType<UpdateOpenrouterMessageBody> },
+  TContext
+> => {
+  const mutationKey = ["updateOpenrouterMessage"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateOpenrouterMessage>>,
+    { messageId: number; data: BodyType<UpdateOpenrouterMessageBody> }
+  > = (props) => {
+    const { messageId, data } = props ?? {};
+
+    return updateOpenrouterMessage(messageId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateOpenrouterMessageMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateOpenrouterMessage>>
+>;
+export type UpdateOpenrouterMessageMutationBody =
+  BodyType<UpdateOpenrouterMessageBody>;
+export type UpdateOpenrouterMessageMutationError = ErrorType<OpenrouterError>;
+
+/**
+ * @summary Update the content of an existing message
+ */
+export const useUpdateOpenrouterMessage = <
+  TError = ErrorType<OpenrouterError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateOpenrouterMessage>>,
+    TError,
+    { messageId: number; data: BodyType<UpdateOpenrouterMessageBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateOpenrouterMessage>>,
+  TError,
+  { messageId: number; data: BodyType<UpdateOpenrouterMessageBody> },
+  TContext
+> => {
+  return useMutation(getUpdateOpenrouterMessageMutationOptions(options));
 };
 
 /**

@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { type StorySettings } from "@/hooks/use-settings";
 
 interface SettingsDialogProps {
@@ -47,7 +48,7 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
           <Settings className="w-5 h-5" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[460px] font-sans bg-card border-card-border">
+      <DialogContent className="sm:max-w-[460px] font-sans bg-card border-card-border max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-serif text-xl text-primary">AI Settings</DialogTitle>
           <DialogDescription className="text-foreground/60">
@@ -56,6 +57,24 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
         </DialogHeader>
 
         <div className="space-y-5 py-2">
+          {/* Blind Mode */}
+          <div className="flex items-center justify-between rounded-lg border border-border/50 px-4 py-3 bg-background/50">
+            <div className="space-y-0.5">
+              <Label htmlFor="blindMode" className="text-sm font-medium">Blind Mode</Label>
+              <p className="text-xs text-muted-foreground">
+                The AI's response is read aloud, then you dictate your turn by voice.
+              </p>
+            </div>
+            <Switch
+              id="blindMode"
+              data-testid="switch-blind-mode"
+              checked={local.blindMode}
+              onCheckedChange={(checked) => setLocal((p) => ({ ...p, blindMode: checked }))}
+              className="ml-4 shrink-0"
+            />
+          </div>
+
+          {/* Model */}
           <div className="space-y-1.5">
             <Label htmlFor="model">Model</Label>
             <Input
@@ -67,10 +86,13 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
               className="bg-background border-border focus-visible:ring-primary font-mono text-sm"
             />
             <p className="text-xs text-muted-foreground">
-              Any OpenRouter model ID, e.g. <span className="font-mono">openrouter/free</span>, <span className="font-mono">meta-llama/llama-4-scout</span>
+              Any OpenRouter model ID, e.g.{" "}
+              <span className="font-mono">openrouter/free</span>,{" "}
+              <span className="font-mono">meta-llama/llama-4-scout</span>
             </p>
           </div>
 
+          {/* Max Tokens */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor="maxTokens">Max Tokens</Label>
@@ -92,10 +114,13 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
             </div>
           </div>
 
+          {/* Temperature */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor="temperature">Temperature</Label>
-              <span className="text-sm tabular-nums text-muted-foreground">{local.temperature.toFixed(2)}</span>
+              <span className="text-sm tabular-nums text-muted-foreground">
+                {local.temperature.toFixed(2)}
+              </span>
             </div>
             <Slider
               id="temperature"
@@ -113,31 +138,37 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
             </div>
           </div>
 
-          <div className="space-y-1.5 pt-2 border-t border-border/40">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">Custom API (optional)</p>
-            <Label htmlFor="apiKey">OpenRouter API Key</Label>
-            <Input
-              id="apiKey"
-              data-testid="input-api-key"
-              type="password"
-              value={local.apiKey}
-              onChange={(e) => setLocal((p) => ({ ...p, apiKey: e.target.value }))}
-              placeholder="sk-or-..."
-              className="bg-background border-border focus-visible:ring-primary font-mono text-sm"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="apiUrl">OpenRouter Base URL</Label>
-            <Input
-              id="apiUrl"
-              data-testid="input-api-url"
-              value={local.apiUrl}
-              onChange={(e) => setLocal((p) => ({ ...p, apiUrl: e.target.value }))}
-              placeholder="https://openrouter.ai/api/v1"
-              className="bg-background border-border focus-visible:ring-primary font-mono text-sm"
-            />
-            <p className="text-xs text-muted-foreground">Leave blank to use the built-in Replit-managed key.</p>
+          {/* Custom API */}
+          <div className="space-y-3 pt-2 border-t border-border/40">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              Custom API (optional)
+            </p>
+            <div className="space-y-1.5">
+              <Label htmlFor="apiKey">OpenRouter API Key</Label>
+              <Input
+                id="apiKey"
+                data-testid="input-api-key"
+                type="password"
+                value={local.apiKey}
+                onChange={(e) => setLocal((p) => ({ ...p, apiKey: e.target.value }))}
+                placeholder="sk-or-..."
+                className="bg-background border-border focus-visible:ring-primary font-mono text-sm"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="apiUrl">OpenRouter Base URL</Label>
+              <Input
+                id="apiUrl"
+                data-testid="input-api-url"
+                value={local.apiUrl}
+                onChange={(e) => setLocal((p) => ({ ...p, apiUrl: e.target.value }))}
+                placeholder="https://openrouter.ai/api/v1"
+                className="bg-background border-border focus-visible:ring-primary font-mono text-sm"
+              />
+              <p className="text-xs text-muted-foreground">
+                Leave blank to use the built-in Replit-managed key.
+              </p>
+            </div>
           </div>
         </div>
 

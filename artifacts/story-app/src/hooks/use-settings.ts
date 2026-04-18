@@ -6,6 +6,7 @@ export interface StorySettings {
   temperature: number;
   apiKey: string;
   apiUrl: string;
+  blindMode: boolean;
 }
 
 const STORAGE_KEY = "story-together-settings";
@@ -16,6 +17,7 @@ const DEFAULTS: StorySettings = {
   temperature: 1.0,
   apiKey: "",
   apiUrl: "",
+  blindMode: false,
 };
 
 function load(): StorySettings {

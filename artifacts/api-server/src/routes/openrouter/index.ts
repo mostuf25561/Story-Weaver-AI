@@ -8,6 +8,8 @@ import {
   ListOpenrouterMessagesParams,
   SendOpenrouterMessageParams,
   SendOpenrouterMessageBody,
+  UpdateOpenrouterMessageParams,
+  UpdateOpenrouterMessageBody,
 } from "@workspace/api-zod";
 import { openrouter } from "@workspace/integrations-openrouter-ai";
 import OpenAI from "openai";
@@ -180,6 +182,29 @@ router.post("/openrouter/conversations/:id/messages", async (req, res): Promise<
 
   res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
   res.end();
+});
+
+router.patch("/openrouter/messages/:messageId", async (req, res): Promise<void> => {
+  const params = UpdateOpenrouterMessageParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const body = UpdateOpenrouterMessageBody.safeParse(req.body);
+  if (!body.success) {
+    res.status(400).json({ error: body.error.message });
+    return;
+  }
+  const [updated] = await db
+    .update(messagesTable)
+    .set({ content: body.data.content })
+    .where(eq(messagesTable.id, params.data.messageId))
+    .returning();
+  if (!updated) {
+    res.status(404).json({ error: "Message not found" });
+    return;
+  }
+  res.json(updated);
 });
 
 export default router;
